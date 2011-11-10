@@ -1,5 +1,7 @@
 #
-# task add <task> [task] - Add a task
+# task add <task> - Add a task
+# task list <task> - List the tasks
+# task delete <task number> - Delete a task
 #
 module.exports = (robot) ->
   robot.respond /(task add|add task) (.+?)$/i, (msg) ->
