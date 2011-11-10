@@ -10,9 +10,10 @@ module.exports = (robot) ->
   robot.respond /(task list|list tasks)/i, (msg) ->
     robot.brain.data.tasks ?= []
     if robot.brain.data.tasks.length > 0
-      msg.send "Your tasks:"
+      response = ""
       for task, num in robot.brain.data.tasks
-        msg.send "##{num+1} - #{task}"
+        response += "##{num+1} - #{task}\n"
+      msg.send response
     else
       msg.send "There are no tasks"
 
