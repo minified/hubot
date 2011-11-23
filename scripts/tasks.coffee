@@ -42,4 +42,4 @@ module.exports = (robot) ->
   robot.respond /(task delete|delete task) #?(\d+)/i, (msg) ->
     taskNum = msg.match[2]
     task = tasks.deleteByNumber taskNum
-    msg.send "Task deleted: #{task.num} - #{task.task}"
+    msg.send "Task deleted: ##{task.num} - #{task.task}"
