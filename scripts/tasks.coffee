@@ -1,6 +1,6 @@
 #
 # task add <task> - Add a task
-# task list <task> - List the tasks
+# task list tasks - List the tasks
 # task delete <task number> - Delete a task
 #
 
