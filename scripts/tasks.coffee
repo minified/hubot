@@ -6,8 +6,9 @@
 module.exports = (robot) ->
   robot.respond /(task add|add task) (.+?)$/i, (msg) ->
     robot.brain.data.tasks ?= []
-    robot.brain.data.tasks.push msg.match[2]
-    msg.send "task added"
+    task = msg.match[2]
+    robot.brain.data.tasks.push task
+    msg.send "task added: #{task}"
 
   robot.respond /(task list|list tasks)/i, (msg) ->
     robot.brain.data.tasks ?= []
