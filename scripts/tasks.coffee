@@ -1,34 +1,38 @@
+# Allows tasks (TODOs) to be added to Hubot
 #
 # task add <task> - Add a task
 # task list tasks - List the tasks
 # task delete <task number> - Delete a task
 #
 
-
 class Tasks
   constructor: (@robot) ->
+    @cache = []
     @robot.brain.on 'loaded', =>
-      @robot.brain.data.tasks ?= []
+      if @robot.brain.data.tasks
+        @cache = @robot.brain.data.tasks
   nextTaskNum: ->
-    tasks = @robot.brain.data.tasks
-    maxTaskNum = if tasks.length then Math.max.apply(Math,tasks.map (n) -> n.num) else 0
+    maxTaskNum = if @cache.length then Math.max.apply(Math,@cache.map (n) -> n.num) else 0
     maxTaskNum++
     maxTaskNum
   add: (taskString) ->
     task = {num: @nextTaskNum(), task: taskString}
-    @robot.brain.data.tasks.push task
+    @cache.push task
+    @robot.brain.data.tasks = @cache
     task
-  all: -> @robot.brain.data.tasks
+  all: -> @cache
   deleteByNumber: (num) ->
-    index = @robot.brain.data.tasks.map((n) -> n.num).indexOf(parseInt(num))
-    @robot.brain.data.tasks.splice(index, 1)[0]
+    index = @cache.map((n) -> n.num).indexOf(parseInt(num))
+    task = @cache.splice(index, 1)[0]
+    @robot.brain.data.tasks = @cache
+    task
 
 module.exports = (robot) ->
   tasks = new Tasks robot
 
   robot.respond /(task add|add task) (.+?)$/i, (msg) ->
     task = tasks.add msg.match[2]
-    msg.send "task added: ##{task.num} - #{task.task}"
+    msg.send "Task added: ##{task.num} - #{task.task}"
 
   robot.respond /(task list|list tasks)/i, (msg) ->
     if tasks.all().length > 0
